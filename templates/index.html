@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Some Page</title>
+</head>
+<body>
+<h1>You're <i>{{ nickname }}</i></h1>
+{% if counter <= 1 %}
+    <h1> You visited me first time</h1>
+{% else %}
+    <h1> You visited me {{ counter }} times</h1>
+{% endif %}
+
+</body>
+</html>
