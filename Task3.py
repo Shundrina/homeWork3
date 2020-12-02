@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, make_response, escape
+from flask import Flask, render_template, request, session, make_response
 
 app = Flask(__name__)
 app.secret_key = b'n657t64%^876'
@@ -11,12 +11,10 @@ def index():
     else:
         nickname = 'somebody'
     counter = 0
-    if session.get('visited'):
-        counter = session['visited']
-    else:
-        session['visited'] = 0
+    if request.cookies.get('counter'):
+        counter = int(request.cookies['counter'])
     response = make_response(render_template('index.html', counter=counter, nickname=nickname))
-    session['visited'] += 1
+    response.set_cookie('counter', str(counter + 1))
     return response
 
 
@@ -36,8 +34,11 @@ def login():
 
 @app.route('/logout')
 def logout():
+    result = make_response('You logged out')
     session.pop('nickname', None)
-    return f"Your session is clear"
+    result.set_cookie('counter', max_age=0)
+    return result
 
 
-app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
